@@ -27,4 +27,32 @@ TODO:
 
 
 
+# Notes
+
+To read code, there programmer must parse the operator precedence, associativity and arity.
+These operator languages can be different levels in the chompsky hierachy.
+
+Take for example a language where all operators are binary and have the same level of precedence and are all left associative.
+
+To parse the operator all is necessary is to determine whether an identifier is even or odd.
+```
+a   b c  d f  g h
+0   1 2  3 4  5 6
+((a b c) d f) g h
+```
+Odd identifiers are the operators, even identifiers are the operands.
+The left operand is whatever the expression of everything on the left evaluates to.
+
+This is a regular grammar.
+
+However, in languages with ambivalence the operator grammar becomes context sentitive.
+The arity of an identifier changes depending on the previous context.
+
+Jelly removes ambivalence but the pattern matching rules once again mean the what combinator the identifier is a operand of (and what position it is in) changes depending on the previous context.
+
+The operator grammar being context sentitive makes array language very hard to read.
+
+Pufferfish solves this by the Lisp way by explicitly specifying the parentheses.
+
+
 
