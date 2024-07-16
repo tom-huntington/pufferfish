@@ -1,4 +1,6 @@
 from dataclasses import dataclass, field
+
+from lark import Transformer
 from core import InteriorWrapper, LeafWrapper, puffer_eval
 import parse_pythonic_syntax
 from numpy.typing import NDArray
@@ -6,6 +8,11 @@ import numpy as np
 from more_itertools import interleave_longest, windowed
 from itertools import repeat, accumulate
 from operator import add
+import lark_parser
+import jello
+from jelly.utils import attrdict
+import jelly
+import tokens
 
 def stringify_2d_unicode(result : NDArray):
     return '\n'.join(''.join(row) for row in result)
@@ -68,14 +75,57 @@ def draw(node : InteriorWrapper | LeafWrapper) -> NDArray:
 def stringify_tree(root):
     return stringify_2d_unicode(draw(root))
 
-a = """\
-: 1 10
-add1 20
-"""
+
+
+class NodeTransformer(Transformer):
+    def builtin(self, tokens):
+        token, = tokens
+        s = token.value
+        if link := jelly.interpreter.atoms.get(jello.to_jelly(s), None):
+            pass
+        else:
+            link = create_constant(None, s)
+        return LeafWrapper(link, s)
+
+    def monad(self, children):
+        return InteriorWrapper(attrdict(arity=1), None, children)
+        return apply_combinator([c for c in children if c is not None], 1)
+
+    def dyad(self, children):
+        return InteriorWrapper(attrdict(arity=2), None, children)
+        return apply_combinator([c for c in children if c is not None], 2)
+    
+    def dyad_end(self, children):
+        return InteriorWrapper(attrdict(arity=2), None, children)
+        return apply_combinator([c for c in children if c is not None], 2)
+    
+    def monad_end(self, children):
+        return InteriorWrapper(attrdict(arity=1), None, children)
+        return apply_combinator([c for c in children if c is not None], 1)
+    
+    def hof(self, children):
+        quick_name, *hof_arguments = children
+        q = jelly.interpreter.quicks.get(tokens.quick.get(quick_name, None), None)
+        # assert q.condition(hof_arguments)
+        link, = q.quicklink(hof_arguments, [], None)
+        return InteriorWrapper(link, None, [LeafWrapper(attrdict(arity=1), children[0].value), *children[1:]])
+        quick_name, *hof_arguments = children
+        q = jelly.interpreter.quicks.get(tokens.quick.get(quick_name, None), None)
+        assert q.condition(hof_arguments)
+        link, = q.quicklink(hof_arguments, [], None)
+        return link
+    
+    def dot(self, children):
+        return None
+        # return attrdict(arity = None, call = None)
 
 if __name__ == "__main__":
-    b, default_args = parse_pythonic_syntax.parse(a)
-    print(stringify_tree(b))
-    c = puffer_eval(b, {}, default_args)
-    print(c)
+    # b, default_args = parse_pythonic_syntax.parse(a)
+    # print(stringify_tree(b))
+    # c = puffer_eval(b, {}, default_args)
+    # print(c)jjkkkk
 
+    ast = lark_parser.puffer_parse("\ key len . \ idx_max at_idx . sum")    
+    print(ast)
+    b = NodeTransformer().transform(ast)
+    print(stringify_tree(b))

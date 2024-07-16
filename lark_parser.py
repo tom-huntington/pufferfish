@@ -4,7 +4,8 @@ from core import *
 import run_lark
 import tokens
 import argparse
-
+import stringify as puffer_stringify
+import jello
 
 def func(arity, children):
     link = apply_combinator([c.link for c in children], arity)
@@ -68,22 +69,33 @@ sample_string = """\
 \ i scan pair .
 """
 
-def evaluate_code(code, args):
-    code = code.lstrip()
-    if code[0] == '@':
-        default_args, code = code.split('\n', 1)
-        default_args = [eval(arg) for arg in default_args.split(' ')[1:]]
-        
+def puffer_parse(code):
     for t in parser.lex(code):
         print((t.line, t.column), repr(t))
 
     print("code\n", code)
     syntax_tree = parser.parse(code)
-    # print("tree.children:\n", len(tree.children),"\n", tree.children)
     print(syntax_tree.data, "\n----")
     print(syntax_tree.pretty())
+    return syntax_tree
+
+def make_link(ast):
+    puffer_stringify.stringify_tree()
+
     t = LinkTransformer()
-    link = t.transform(syntax_tree)
+    link = t.transform(ast)
+    return link
+
+
+def evaluate_code(code, args):
+    code = code.lstrip()
+    if code[0] == '@':
+        default_args, code = code.split('\n', 1)
+        default_args = [eval(arg) for arg in default_args.split(' ')[1:]]
+    
+    ast = puffer_parse(code)
+    link = make_link(ast)
+
     match link.arity:
         case 1:
             arg, = args or default_args
