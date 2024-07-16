@@ -34,7 +34,7 @@ for puzzle in data['puzzles']:
         expected_result = example['result']
         
         try:
-            result = lark_parser.evaluate_code(code, args)
+            result = lark_parser.evaluate_code_ignoring_default_args(code, args)
             if result == expected_result:
                 print(f"✅ Test passed for puzzle: {name}, args: {args}")
             else:
@@ -43,6 +43,7 @@ for puzzle in data['puzzles']:
         except Exception as e:
             print(f"❌ Test failed for puzzle: {name}, args: {args}, due to error: {e}")
             all_tests_passed = False
+            raise e
 
 # Exit with code 1 if any test failed
 if not all_tests_passed:

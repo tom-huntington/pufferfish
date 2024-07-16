@@ -46,11 +46,11 @@ class LinkTransformer(Transformer):
     def dyad(self, children):
         return apply_combinator([c for c in children if c is not None], 2)
     
-    def dyad_end(self, children):
-        return apply_combinator([c for c in children if c is not None], 2)
+    # def dyad_end(self, children):
+    #     return apply_combinator([c for c in children if c is not None], 2)
     
-    def monad_end(self, children):
-        return apply_combinator([c for c in children if c is not None], 1)
+    # def monad_end(self, children):
+    #     return apply_combinator([c for c in children if c is not None], 1)
     
     def hof(self, children):
         quick_name, *hof_arguments = children
@@ -80,25 +80,40 @@ def puffer_parse(code):
     return syntax_tree
 
 def make_link(ast):
-    puffer_stringify.stringify_tree()
+    # print(puffer_stringify.stringify_tree(ast))
 
     t = LinkTransformer()
     link = t.transform(ast)
     return link
 
-
-def evaluate_code(code, args):
+def evaluate_code_ignoring_default_args(code, args):
     code = code.lstrip()
     if code[0] == '@':
-        default_args, code = code.split('\n', 1)
-        default_args = [eval(arg) for arg in default_args.split(' ')[1:]]
+        _, code = code.split('\n', 1)
     
+    return evaluate_code(code, args)
+    
+        
+
+def evaluate_maybe_string_args(code, maybe_args):
+    code = code.lstrip()
+    if maybe_args:
+        args = [eval(arg) for arg in maybe_args]
+    else:
+        assert code[0] == '@'
+        default_args, code = code.split('\n', 1)
+        args = [eval(arg) for arg in default_args.split(' ')[1:]]
+    
+    return evaluate_code(code, args)
+
+
+def evaluate_code(code, args):
     ast = puffer_parse(code)
     link = make_link(ast)
 
     match link.arity:
         case 1:
-            arg, = args or default_args
+            arg, = args
             return monadic_link(link, arg)
         case 2:
             assert len(args) == 2
@@ -120,7 +135,7 @@ def main():
         print("No code provided")
         exit(1)
 
-    print(evaluate_code(args.code or code, [eval(arg) for arg in args.args]))
+    print(evaluate_maybe_string_args(args.code or code, args.args))
     
 
 

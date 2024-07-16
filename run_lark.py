@@ -7,8 +7,8 @@ monads = ' | '.join(f'"{a}"' for a in [*tokens.dyadic.keys(), *tokens.monadic.ke
 
 grammar=f"""
 ?start: func_end | "\\\\" monad_end | "|" dyad_end
-monad_end: func
-dyad_end: func
+monad_end: func -> monad
+dyad_end: func -> dyad
 monad: (monad "." | monad func | func ~ 0..2 ) (func_end | func)
 dyad: (dyad ":" | dyad func | func ~ 0..2) (func_end | func)
 ?func_end: "\\\\" monad | "|" dyad 

@@ -73,7 +73,8 @@ def draw(node : InteriorWrapper | LeafWrapper) -> NDArray:
 # draw(root)  
 
 def stringify_tree(root):
-    return stringify_2d_unicode(draw(root))
+    array2d = draw(root)
+    return stringify_2d_unicode(array2d)
 
 
 
@@ -95,13 +96,13 @@ class NodeTransformer(Transformer):
         return InteriorWrapper(attrdict(arity=2), None, children)
         return apply_combinator([c for c in children if c is not None], 2)
     
-    def dyad_end(self, children):
-        return InteriorWrapper(attrdict(arity=2), None, children)
-        return apply_combinator([c for c in children if c is not None], 2)
+    # def dyad_end(self, children):
+    #     return InteriorWrapper(attrdict(arity=2), None, children)
+    #     return apply_combinator([c for c in children if c is not None], 2)
     
-    def monad_end(self, children):
-        return InteriorWrapper(attrdict(arity=1), None, children)
-        return apply_combinator([c for c in children if c is not None], 1)
+    # def monad_end(self, children):
+    #     return InteriorWrapper(attrdict(arity=1), None, children)
+    #     return apply_combinator([c for c in children if c is not None], 1)
     
     def hof(self, children):
         quick_name, *hof_arguments = children
