@@ -72,7 +72,7 @@ def evaluate_code(code, args):
     code = code.lstrip()
     if code[0] == '@':
         default_args, code = code.split('\n', 1)
-        default_args = default_args.split(' ')[1:]
+        default_args = [eval(arg) for arg in default_args.split(' ')[1:]]
         
     for t in parser.lex(code):
         print((t.line, t.column), repr(t))
@@ -87,10 +87,10 @@ def evaluate_code(code, args):
     match link.arity:
         case 1:
             arg, = args or default_args
-            print(monadic_link(link, eval(arg)))
+            return monadic_link(link, arg)
         case 2:
             assert len(args) == 2
-            print(dyadic_link(link, [eval(a) for a in args]))
+            return dyadic_link(link, args)
 
 def main():
     parser = argparse.ArgumentParser(description='Pufferfish interpreter')
@@ -108,7 +108,7 @@ def main():
         print("No code provided")
         exit(1)
 
-    evaluate_code(args.code or code, args.args)
+    print(evaluate_code(args.code or code, [eval(arg) for arg in args.args]))
     
 
 

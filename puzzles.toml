@@ -1,7 +1,6 @@
 [[puzzles]]
 name = "3005. Count Elements With Maximum Frequency"
-[puzzles.links]
-leetcode = "https://leetcode.com/contest/weekly-contest-380/problems/count-elements-with-maximum-frequency/"
+links = ["https://leetcode.com/contest/weekly-contest-380/problems/count-elements-with-maximum-frequency/"]
 [[puzzles.examples]]
 args = [[1,2,2,3,1,4]]
 result = 4
@@ -11,8 +10,7 @@ result = 5
 
 [[puzzles]]
 name = "3010. Divide an Array Into Subarrays With Minimum Cost I"
-[puzzles.links]
-leetcode = "https://leetcode.com/contest/biweekly-contest-122/problems/divide-an-array-into-subarrays-with-minimum-cost-i/"
+links = ["https://leetcode.com/contest/biweekly-contest-122/problems/divide-an-array-into-subarrays-with-minimum-cost-i/"]
 [[puzzles.examples]]
 args = [[1,2,3,12]]
 result = 6

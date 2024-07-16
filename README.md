@@ -1,5 +1,11 @@
 # <p align="center">🐡 Pufferfish 🐡</p>
 
+
+# Notes
+The syntax is either explicit (`.` and `:`) or regular.
+You do *not* need to know the arities to determine the combinator groupings.
+(although you do need to know arities to determine which combinator results from a group)
+
 An alternative syntax for [Jello](https://github.com/codereport/jello)
 / 🪼 [Jellyfish](https://github.com/codereport/jellyfish) 🪼
 

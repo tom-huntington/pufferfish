@@ -9,8 +9,8 @@ grammar=f"""
 ?start: func_end | "\\\\" monad_end | "|" dyad_end
 monad_end: func
 dyad_end: func
-monad: (monad | func) func (func_end | func)
-dyad: (dyad | func) func (func_end | func)
+monad: (monad "." | monad func | func ~ 0..2 ) (func_end | func)
+dyad: (dyad ":" | dyad func | func ~ 0..2) (func_end | func)
 ?func_end: "\\\\" monad | "|" dyad 
 ?func: "(" monad | monad_end ")" | "{{" dyad | dyad_end"}}" | builtin | dot | hof
 !hof: HOFS func
@@ -29,7 +29,7 @@ dot: "."
 print(grammar)
 
 sample_string ="""\
-\ add1 . pair
+\ add1 . pair i
 """
 # sample_string="\ scan pair"
 # logger.setLevel(logging.DEBUG)
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     parser = Lark(grammar, debug=False)
     for i, t in enumerate(parser.lex(sample_string)):
         print((t.line, t.column), repr(t))
-    parse_tree = parser.parse(sample_string, start="func_end")
+    parse_tree = parser.parse(sample_string)
     print(parse_tree)
     print(parse_tree.pretty())
 
