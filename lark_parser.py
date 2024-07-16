@@ -45,6 +45,12 @@ class LinkTransformer(Transformer):
     def dyad(self, children):
         return apply_combinator([c for c in children if c is not None], 2)
     
+    def dyad_end(self, children):
+        return apply_combinator([c for c in children if c is not None], 2)
+    
+    def monad_end(self, children):
+        return apply_combinator([c for c in children if c is not None], 1)
+    
     def hof(self, children):
         quick_name, *hof_arguments = children
         q = jelly.interpreter.quicks.get(tokens.quick.get(quick_name, None), None)
@@ -56,7 +62,7 @@ class LinkTransformer(Transformer):
         return None
         # return attrdict(arity = None, call = None)
 
-parser = Lark(run_lark.grammar)
+parser = Lark(run_lark.grammar, debug=False)
 
 sample_string = """\
 \ i scan pair .
@@ -68,15 +74,19 @@ def evaluate_code(code, args):
         default_args, code = code.split('\n', 1)
         default_args = default_args.split(' ')[1:]
         
+    for t in parser.lex(code):
+        print((t.line, t.column), repr(t))
+
     print("code\n", code)
-    syntax_tree, = parser.parse(code).children
+    syntax_tree = parser.parse(code)
+    # print("tree.children:\n", len(tree.children),"\n", tree.children)
     print(syntax_tree.data, "\n----")
     print(syntax_tree.pretty())
     t = LinkTransformer()
     link = t.transform(syntax_tree)
     match link.arity:
         case 1:
-            arg, = args
+            arg, = args or default_args
             print(monadic_link(link, eval(arg)))
         case 2:
             assert len(args) == 2

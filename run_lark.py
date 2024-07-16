@@ -3,18 +3,21 @@ from lark.indenter import Indenter
 import tokens
 
 hofs = ' | '.join(f'"{k}"' for k in tokens.quick.keys())
-atoms = ' | '.join(f'"{a}"' for a in [*tokens.dyadic.keys(), *tokens.monadic.keys()])
+monads = ' | '.join(f'"{a}"' for a in [*tokens.dyadic.keys(), *tokens.monadic.keys()])
 
 grammar=f"""
-start: "\\\\" monad | "|" dyad
+?start: func_end | "\\\\" monad_end | "|" dyad_end
+monad_end: func
+dyad_end: func
 monad: (monad | func) func (func_end | func)
 dyad: (dyad | func) func (func_end | func)
-?func_end: "\\\\" monad | "|" dyad
-?func: "(" monad ")" | "{{" dyad "}}" | builtin | dot | hof
+?func_end: "\\\\" monad | "|" dyad 
+?func: "(" monad | monad_end ")" | "{{" dyad | dyad_end"}}" | builtin | dot | hof
 !hof: HOFS func
 HOFS: {hofs}
-builtin: BUILTIN
-BUILTIN: {atoms}
+builtin: BUILTIN_DYAD | BUILTIN_MONAD
+BUILTIN_DYAD: {' | '.join(f'"{a}"' for a in tokens.dyadic.keys())}
+BUILTIN_MONAD: {' | '.join(f'"{a}"' for a in tokens.monadic.keys())}
 dot: "."
 
 %import common.CNAME -> NAME
@@ -26,16 +29,16 @@ dot: "."
 print(grammar)
 
 sample_string ="""\
-\ scan pair ..
+\ add1 . pair
 """
 # sample_string="\ scan pair"
 # logger.setLevel(logging.DEBUG)
 if __name__ == "__main__":
     print(sample_string)
-    parser = Lark(grammar)
+    parser = Lark(grammar, debug=False)
     for i, t in enumerate(parser.lex(sample_string)):
         print((t.line, t.column), repr(t))
-    parse_tree = parser.parse(sample_string)
+    parse_tree = parser.parse(sample_string, start="func_end")
     print(parse_tree)
     print(parse_tree.pretty())
 

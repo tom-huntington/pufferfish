@@ -158,6 +158,7 @@ combinators = {
         arity = 1,
         call = lambda x: dyadic_link(g, (monadic_link(f, x), monadic_link(h, x)))
     ),
+    #             1  2
     'sig': lambda f, g: attrdict(
         arity = 1,
         call = lambda x: dyadic_link(g, (monadic_link(f, x), x))
@@ -166,14 +167,16 @@ combinators = {
         arity = 1,
         call = lambda x: monadic_link(g, monadic_link(f, x))
     ),
+    #           2  1
     'S': lambda f, g: attrdict(
         arity = 1,
-        call = lambda x: dyadic_link(g, (x, monadic_link(f, x)))
+        call = lambda x: dyadic_link(f, (x, monadic_link(g, x)))
     ),
     'W': lambda f: attrdict(
         arity = 1,
         call = lambda x: dyadic_link(f, (x, x))
     ),
+    'I': lambda f: f
 }
 
 jelly_dyadic_rules = {
@@ -184,6 +187,7 @@ jelly_dyadic_rules = {
     (1, 2, 2): "phi.2",
     (1, 2): "delta",
     (1, 1): "B.3",
+    (2,): "I"
 }
 
 jelly_monadic_rules = {
@@ -192,6 +196,7 @@ jelly_monadic_rules = {
     (1, 1): "B",
     (2, 1): "S",
     (2,): "W",
+    (1,): "I"
 }
 
 def get_arity(o):
