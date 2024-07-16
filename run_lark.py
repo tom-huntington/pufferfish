@@ -1,59 +1,41 @@
 from lark import Lark, logger
 from lark.indenter import Indenter
-import logging
+import tokens
 
-grammar="""\
-start: block_monad | block_dyad | inl_monad _NL* | inl_dyad _NL*
-?func: monad0 | dyad0
-?func_d: builtin _DNL | monad_d | dyad_d
-builtin: NAME
+hofs = ' | '.join(f'"{k}"' for k in tokens.quick.keys())
+atoms = ' | '.join(f'"{a}"' for a in [*tokens.dyadic.keys(), *tokens.monadic.keys()])
 
-block_monad: "." _NL monad_d? func+
-block_dyad: ":" _NL dyad_d? func+
-?monad0: _INDENT block_monad _DEDENT | inl_monad _NL | builtin _NL
-?dyad0: _INDENT block_dyad _DEDENT | inl_dyad _NL | builtin _NL
-inl_monad: "(" m? inl_func+ ")"
-inl_dyad: "{" d? inl_func+ "}"
-monad_d: monad_d? func* func_d
-dyad_d: dyad_d? func* func_d
-d: d? inl_func+ ":"
-m: m? inl_func+ "."
+grammar=f"""
+start: "\\\\" monad | "|" dyad
+monad: (monad | func) func (func_end | func)
+dyad: (dyad | func) func (func_end | func)
+?func_end: "\\\\" monad | "|" dyad
+?func: "(" monad ")" | "{{" dyad "}}" | builtin | dot | hof
+!hof: HOFS func
+HOFS: {hofs}
+builtin: BUILTIN
+BUILTIN: {atoms}
+dot: "."
 
-?inl_func: builtin | inl_monad | inl_dyad
-
-_NL: /\\n */
-_DNL: /\\n\\n */
-
-%declare _INDENT _DEDENT
 %import common.CNAME -> NAME
 %import common.WS_INLINE
+%import common.NEWLINE
 %ignore WS_INLINE
+%ignore NEWLINE
 """
+print(grammar)
+
 sample_string ="""\
-.
-c
-    .
-    a
-    b
-f
+\ scan pair ..
 """
-
-
-class TreeIndenter(Indenter):
-    NL_type = 'NL'
-    OPEN_PAREN_types = []
-    CLOSE_PAREN_types = []
-    INDENT_type = '_INDENT'
-    DEDENT_type = '_DEDENT'
-    tab_len = 4
-
+# sample_string="\ scan pair"
 # logger.setLevel(logging.DEBUG)
-print(sample_string)
-parser = Lark(grammar, postlex=TreeIndenter())
-# parser = Lark(grammar, postlex=TreeIndenter(), debug=True)
-for i, t in enumerate(parser.lex(sample_string)):
-    print((t.line, t.column), repr(t))
-parse_tree = parser.parse(sample_string)
-print(parse_tree)
-print(parse_tree.pretty())
+if __name__ == "__main__":
+    print(sample_string)
+    parser = Lark(grammar)
+    for i, t in enumerate(parser.lex(sample_string)):
+        print((t.line, t.column), repr(t))
+    parse_tree = parser.parse(sample_string)
+    print(parse_tree)
+    print(parse_tree.pretty())
 
