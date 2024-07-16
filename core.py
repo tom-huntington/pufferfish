@@ -191,7 +191,7 @@ jelly_monadic_rules = {
     (1, 2): "sig",
     (1, 1): "B",
     (2, 1): "S",
-    (2): "W",
+    (2,): "W",
 }
 
 def get_arity(o):

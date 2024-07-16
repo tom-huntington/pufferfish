@@ -3,6 +3,7 @@ from lark.indenter import Indenter
 from core import *
 import run_lark
 import tokens
+import argparse
 
 
 def func(arity, children):
@@ -39,10 +40,10 @@ class LinkTransformer(Transformer):
         return link
 
     def monad(self, children):
-        return apply_combinator(children, 1)
+        return apply_combinator([c for c in children if c is not None], 1)
 
     def dyad(self, children):
-        return apply_combinator(children, 2)
+        return apply_combinator([c for c in children if c is not None], 2)
     
     def hof(self, children):
         quick_name, *hof_arguments = children
@@ -50,6 +51,10 @@ class LinkTransformer(Transformer):
         assert q.condition(hof_arguments)
         link, = q.quicklink(hof_arguments, [], None)
         return link
+    
+    def dot(self, children):
+        return None
+        # return attrdict(arity = None, call = None)
 
 parser = Lark(run_lark.grammar)
 
@@ -57,15 +62,45 @@ sample_string = """\
 \ i scan pair .
 """
 
-def test():
-    print(sample_string)
-    syntax_tree, = parser.parse(sample_string).children
+def evaluate_code(code, args):
+    code = code.lstrip()
+    if code[0] == '@':
+        default_args, code = code.split('\n', 1)
+        default_args = default_args.split(' ')[1:]
+        
+    print("code\n", code)
+    syntax_tree, = parser.parse(code).children
     print(syntax_tree.data, "\n----")
     print(syntax_tree.pretty())
     t = LinkTransformer()
     link = t.transform(syntax_tree)
-    # call_link = monadic_link if link.data == "monad" else dyadic_link
-    print(monadic_link(link, [1, 2, 3]))
+    match link.arity:
+        case 1:
+            arg, = args
+            print(monadic_link(link, eval(arg)))
+        case 2:
+            assert len(args) == 2
+            print(dyadic_link(link, [eval(a) for a in args]))
+
+def main():
+    parser = argparse.ArgumentParser(description='Pufferfish interpreter')
+
+    parser.add_argument('-c', '--code', type=str, help='Code')
+    parser.add_argument('-f', '--file', type=str, help='Code file path')
+    parser.add_argument('-a', '--args', nargs='+')
+    args = parser.parse_args()
+    print(args.args)
+    if args.file and not args.code:
+        with open(args.file) as f:
+            code = f.read()
+    
+    if not (args.code or args.file):
+        print("No code provided")
+        exit(1)
+
+    evaluate_code(args.code or code, args.args)
+    
+
 
 if __name__ == '__main__':
-    test()
+    main()
