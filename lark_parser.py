@@ -80,7 +80,7 @@ def puffer_parse(code):
     return syntax_tree
 
 def make_link(ast):
-    # print(puffer_stringify.stringify_tree(ast))
+    print(puffer_stringify.stringify_tree(ast))
 
     t = LinkTransformer()
     link = t.transform(ast)

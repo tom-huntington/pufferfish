@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 from lark import Transformer
-from core import InteriorWrapper, LeafWrapper, puffer_eval
+from core import HofWrapper, InteriorWrapper, LeafWrapper, puffer_eval
 import parse_pythonic_syntax
 from numpy.typing import NDArray
 import numpy as np
@@ -24,7 +24,7 @@ def draw(node : InteriorWrapper | LeafWrapper) -> NDArray:
     match node:
         case LeafWrapper(link, token):
             return np.array(list(token)).reshape(1,-1)
-        case InteriorWrapper():
+        case InteriorWrapper() | HofWrapper():
             children = [draw(child) for child in node.children]
             max_height = max(child.shape[0] for child in children)
 
@@ -52,7 +52,7 @@ def draw(node : InteriorWrapper | LeafWrapper) -> NDArray:
                 middle = width//2
                 for i in range(width):
                     if i in middles:
-                        if i == middles[0]: yield "╰"
+                        if i == middles[0]: yield "╰" if len(middles) != 1 else "│"
                         elif i == middles[-1]: yield "╯"
                         elif i == middle: yield "┼"
                         else: yield '┴'
@@ -62,18 +62,27 @@ def draw(node : InteriorWrapper | LeafWrapper) -> NDArray:
         
             width = body.shape[1]
             foot = np.array([*footer(middles, width)]).reshape(1,-1)
-            middle_range = range(width//2, width//2 + len(node.token()))
+
+            def centered_indices(width, inner_len):
+                start = (width - inner_len + 1) // 2
+                end = start + inner_len
+                return range(start, end)
+
+            middle_range = centered_indices(width, len(node.token()))
 
             foot2 = np.array([(' ' if i not in middle_range else node.token()[middle_range.index(i)]) for i in range(width)]).reshape(1,-1)
             result = np.concatenate((body, foot, foot2), axis=0)
             # print2d_unicode(result)
             return result
+        case _:
+            raise Exception("not matched")
 
 # root = parse("{add1 pair | add1 }")
 # draw(root)  
 
 def stringify_tree(root):
-    array2d = draw(root)
+    node_tree = NodeTransformer().transform(root)
+    array2d = draw(node_tree)
     return stringify_2d_unicode(array2d)
 
 
@@ -109,7 +118,7 @@ class NodeTransformer(Transformer):
         q = jelly.interpreter.quicks.get(tokens.quick.get(quick_name, None), None)
         # assert q.condition(hof_arguments)
         link, = q.quicklink(hof_arguments, [], None)
-        return InteriorWrapper(link, None, [LeafWrapper(attrdict(arity=1), children[0].value), *children[1:]])
+        return HofWrapper(link, quick_name.value, hof_arguments)
         quick_name, *hof_arguments = children
         q = jelly.interpreter.quicks.get(tokens.quick.get(quick_name, None), None)
         assert q.condition(hof_arguments)
@@ -128,5 +137,4 @@ if __name__ == "__main__":
 
     ast = lark_parser.puffer_parse("\ key len . \ idx_max at_idx . sum")    
     print(ast)
-    b = NodeTransformer().transform(ast)
-    print(stringify_tree(b))
+    print(stringify_tree(ast))

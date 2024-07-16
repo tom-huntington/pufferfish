@@ -55,8 +55,11 @@ class LeafWrapper:
 @dataclass
 class HofWrapper:
     link : Callable
-    token : str
-    args : list[LeafWrapper | InteriorWrapper]
+    token_ : str
+    children : list[LeafWrapper | InteriorWrapper]
+
+    def token(self):
+        return self.token_
 
     # def __repr__(self):
     #     return self.token
