@@ -9,8 +9,10 @@ grammar=f"""
 ?start: func_end | "\\\\" monad_end | "|" dyad_end
 monad_end: func -> monad
 dyad_end: func -> dyad
-monad: (monad "." | monad)? func ~ 0..2 (func_end | func)
-dyad: (dyad ":" | dyad)? func ~ 0..2 (func_end | func)
+monad: monad3? func? (func_end | func) | monad "." func? (func_end | func)
+monad3: (monad "." | monad3 | func) func (func_end | func) -> monad
+dyad: dyad3? func? (func_end | func) | dyad "." func? (func_end | func)
+dyad3: (dyad ":" | dyad3 | func) func (func_end | func) -> dyad
 ?func_end: "\\\\" monad | "|" dyad 
 ?func: "(" monad | monad_end ")" | "{{" dyad | dyad_end"}}" | builtin | hof | literal
 !hof: HOFS func
