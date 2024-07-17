@@ -2,21 +2,23 @@ from lark import Lark, logger
 from lark.indenter import Indenter
 import tokens
 
-hofs = ' | '.join(f'"{k}"' for k in tokens.quick.keys())
+dyadic_quicks = ('chunk_fold', 'slide_fold')
+hofs1 = ' | '.join(f'"{k}"' for k in tokens.quick.keys() if k not in dyadic_quicks)
+hofs2 = ' | '.join(f'"{k}"' for k in dyadic_quicks)
 monads = ' | '.join(f'"{a}"' for a in [*tokens.dyadic.keys(), *tokens.monadic.keys()])
 
+
 grammar=f"""
-?start: func_end | "\\\\" monad_end | "|" dyad_end
-monad_end: func -> monad
-dyad_end: func -> dyad
+?start: func_end 
 monad: monad3? func? (func_end | func) | monad "." func? (func_end | func)
 monad3: (monad "." | monad3 | func) func (func_end | func) -> monad
 dyad: dyad3? func? (func_end | func) | dyad "." func? (func_end | func)
 dyad3: (dyad ":" | dyad3 | func) func (func_end | func) -> dyad
 ?func_end: "\\\\" monad | "|" dyad 
-?func: "(" monad | monad_end ")" | "{{" dyad | dyad_end"}}" | builtin | hof | literal
-!hof: HOFS func
-HOFS: {hofs}
+?func: "(" monad ")" | "{{" dyad "}}" | builtin | hof | literal
+!hof: (HOFS1 func) | (HOFS2 func func)
+HOFS1: {hofs1}
+HOFS2: {hofs2}
 builtin: BUILTIN_DYAD | BUILTIN_MONAD
 BUILTIN_DYAD: {' | '.join(f'"{a}"' for a in tokens.dyadic.keys())}
 BUILTIN_MONAD: {' | '.join(f'"{a}"' for a in tokens.monadic.keys())}
