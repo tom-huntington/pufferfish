@@ -12,13 +12,30 @@ dyad_end: func -> dyad
 monad: (monad "." | monad func | func ~ 0..2 ) (func_end | func)
 dyad: (dyad ":" | dyad func | func ~ 0..2) (func_end | func)
 ?func_end: "\\\\" monad | "|" dyad 
-?func: "(" monad | monad_end ")" | "{{" dyad | dyad_end"}}" | builtin | dot | hof
+?func: "(" monad | monad_end ")" | "{{" dyad | dyad_end"}}" | builtin | hof | literal
 !hof: HOFS func
 HOFS: {hofs}
 builtin: BUILTIN_DYAD | BUILTIN_MONAD
 BUILTIN_DYAD: {' | '.join(f'"{a}"' for a in tokens.dyadic.keys())}
 BUILTIN_MONAD: {' | '.join(f'"{a}"' for a in tokens.monadic.keys())}
 dot: "."
+
+literal: string
+        | number
+        | "True"     -> true
+        | "False"    -> false
+        | "None"     -> null
+        | list
+        | dict
+
+string  : ESCAPED_STRING
+number  : SIGNED_NUMBER
+list    : "[" [literal ("," literal)*] "]"
+dict    : "{" [pair ("," pair)*] "}"
+pair    : string ":" literal
+
+%import common.ESCAPED_STRING
+%import common.SIGNED_NUMBER
 
 %import common.CNAME -> NAME
 %import common.WS_INLINE
@@ -29,7 +46,7 @@ dot: "."
 print(grammar)
 
 sample_string ="""\
-\ add1 . pair i
+\ pair 1
 """
 # sample_string="\ scan pair"
 # logger.setLevel(logging.DEBUG)

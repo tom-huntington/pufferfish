@@ -40,17 +40,18 @@ class LinkTransformer(Transformer):
         else: link = create_constant(None, s)
         return link
 
+
     def monad(self, children):
-        return apply_combinator([c for c in children if c is not None], 1)
+        return apply_combinator(children, 1)
 
     def dyad(self, children):
-        return apply_combinator([c for c in children if c is not None], 2)
-    
-    # def dyad_end(self, children):
-    #     return apply_combinator([c for c in children if c is not None], 2)
-    
-    # def monad_end(self, children):
-    #     return apply_combinator([c for c in children if c is not None], 1)
+        return apply_combinator(children, 2)
+
+    def literal(self, children):
+        child, = children
+        literal_as_str, = child.children
+        value = eval(literal_as_str)
+        return attrdict(call=(lambda: value), arity=0)
     
     def hof(self, children):
         quick_name, *hof_arguments = children
@@ -80,7 +81,7 @@ def puffer_parse(code):
     return syntax_tree
 
 def make_link(ast):
-    print(puffer_stringify.stringify_tree(ast))
+    # print(puffer_stringify.stringify_tree(ast))
 
     t = LinkTransformer()
     link = t.transform(ast)
