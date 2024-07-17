@@ -32,12 +32,7 @@ class LinkTransformer(Transformer):
     def builtin(self, tokens):
         token, = tokens
         s = token.value
-        if link := jelly.interpreter.atoms.get(jello.to_jelly(s), None):
-            pass
-        elif jelly_token := jello_tokens.quick.get(s, None):
-            raise "not implemented"
-            return hof_token(s, jelly_token, hof_arity[s])
-        else: link = create_constant(None, s)
+        link = jelly.interpreter.atoms.get(jello.to_jelly(s))
         return link
 
 
@@ -60,10 +55,6 @@ class LinkTransformer(Transformer):
         link, = q.quicklink(hof_arguments, [], None)
         return link
     
-    def dot(self, children):
-        return None
-        # return attrdict(arity = None, call = None)
-
 parser = Lark(run_lark.grammar, debug=False)
 
 sample_string = """\
@@ -81,7 +72,7 @@ def puffer_parse(code):
     return syntax_tree
 
 def make_link(ast):
-    # print(puffer_stringify.stringify_tree(ast))
+    print(puffer_stringify.stringify_tree(ast))
 
     t = LinkTransformer()
     link = t.transform(ast)

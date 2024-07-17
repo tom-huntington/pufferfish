@@ -91,11 +91,7 @@ class NodeTransformer(Transformer):
     def builtin(self, tokens):
         token, = tokens
         s = token.value
-        if link := jelly.interpreter.atoms.get(jello.to_jelly(s), None):
-            pass
-        else:
-            link = create_constant(None, s)
-        return LeafWrapper(link, s)
+        return LeafWrapper(jelly.interpreter.atoms.get(jello.to_jelly(s)), s)
 
     def monad(self, children):
         return InteriorWrapper(attrdict(arity=1), None, children)
@@ -125,9 +121,10 @@ class NodeTransformer(Transformer):
         link, = q.quicklink(hof_arguments, [], None)
         return link
     
-    def dot(self, children):
-        return None
-        # return attrdict(arity = None, call = None)
+    def literal(self, children):
+        child, = children
+        literal_as_str, = child.children
+        return LeafWrapper(attrdict(arity=0), str(literal_as_str))
 
 if __name__ == "__main__":
     # b, default_args = parse_pythonic_syntax.parse(a)
