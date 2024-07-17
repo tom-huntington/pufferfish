@@ -60,7 +60,12 @@ def main():
 
     for i in itertools.count(0):
         code = session.prompt(f'{string_args} >> ')
-        print('\n', lark_parser.evaluate_code(code, args), '\n')
+        try:
+            print('\n', lark_parser.evaluate_code(code, args), '\n')
+        except Exception as e:
+            print(f"error: {e}\n")
+            
+            
 
 if __name__ == "__main__":
     main()

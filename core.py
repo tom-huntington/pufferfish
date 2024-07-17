@@ -190,6 +190,11 @@ combinators = {
         arity = 1,
         call = lambda x: dyadic_link(g, (niladic_link(f), x))
     ),
+    #
+    'phik': lambda f, g, h: attrdict(
+        arity = 1,
+        call = lambda x: dyadic_link(g, (monadic_link(f, x), niladic_link(h))),
+    )
 }
 
 jelly_dyadic_rules = {
@@ -212,6 +217,7 @@ jelly_monadic_rules = {
     (1,): "I",
     (2, 0): "bb",
     (0, 2): "bf",
+    (1, 2, 0): "phik",
 }
 
 def get_arity(o):

@@ -9,8 +9,8 @@ grammar=f"""
 ?start: func_end | "\\\\" monad_end | "|" dyad_end
 monad_end: func -> monad
 dyad_end: func -> dyad
-monad: (monad "." | monad func | func ~ 0..2 ) (func_end | func)
-dyad: (dyad ":" | dyad func | func ~ 0..2) (func_end | func)
+monad: (monad "." | monad)? func ~ 0..2 (func_end | func)
+dyad: (dyad ":" | dyad)? func ~ 0..2 (func_end | func)
 ?func_end: "\\\\" monad | "|" dyad 
 ?func: "(" monad | monad_end ")" | "{{" dyad | dyad_end"}}" | builtin | hof | literal
 !hof: HOFS func
@@ -20,21 +20,8 @@ BUILTIN_DYAD: {' | '.join(f'"{a}"' for a in tokens.dyadic.keys())}
 BUILTIN_MONAD: {' | '.join(f'"{a}"' for a in tokens.monadic.keys())}
 dot: "."
 
-literal: string
-        | number
-        | "True"     -> true
-        | "False"    -> false
-        | "None"     -> null
-        | list
-        | dict
-
-string  : ESCAPED_STRING
-number  : SIGNED_NUMBER
-list    : "[" [literal ("," literal)*] "]"
-dict    : "{" [pair ("," pair)*] "}"
-pair    : string ":" literal
-
-%import common.ESCAPED_STRING
+number: SIGNED_NUMBER
+literal: number
 %import common.SIGNED_NUMBER
 
 %import common.CNAME -> NAME
@@ -43,7 +30,24 @@ pair    : string ":" literal
 %ignore WS_INLINE
 %ignore NEWLINE
 """
-print(grammar)
+
+# literal: string
+#         | number
+#         | "True"     -> true
+#         | "False"    -> false
+#         | "None"     -> null
+#         | list
+#         | dict
+
+# string  : ESCAPED_STRING
+# list    : "[" [literal ("," literal)*] "]"
+# dict    : "{" [pair ("," pair)*] "}"
+# pair    : string ":" literal
+
+# %import common.ESCAPED_STRING
+
+
+# print(grammar)
 
 sample_string ="""\
 \ pair 1
