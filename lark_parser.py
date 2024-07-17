@@ -6,6 +6,7 @@ import tokens
 import argparse
 import stringify as puffer_stringify
 import jello
+from ast import literal_eval
 
 def func(arity, children):
     link = apply_combinator([c.link for c in children], arity)
@@ -45,7 +46,7 @@ class LinkTransformer(Transformer):
     def literal(self, children):
         child, = children
         literal_as_str, = child.children
-        value = eval(literal_as_str)
+        value = literal_eval(literal_as_str)
         return attrdict(call=(lambda: value), arity=0)
     
     def hof(self, children):
@@ -90,11 +91,11 @@ def evaluate_code_ignoring_default_args(code, args):
 def evaluate_maybe_string_args(code, maybe_args):
     code = code.lstrip()
     if maybe_args:
-        args = [eval(arg) for arg in maybe_args]
+        args = [literal_eval(arg) for arg in maybe_args]
     else:
         assert code[0] == '@'
         default_args, code = code.split('\n', 1)
-        args = [eval(arg) for arg in default_args.split(' ')[1:]]
+        args = [literal_eval(arg) for arg in default_args.split(' ')[1:]]
     
     return evaluate_code(code, args)
 

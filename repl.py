@@ -7,6 +7,7 @@ from prompt_toolkit.lexers import Lexer
 from prompt_toolkit.document import Document
 from prompt_toolkit.formatted_text import StyleAndTextTuples
 import tokens
+from ast import literal_eval
 
 class KeywordLexer(Lexer):
     def __init__(self, red_words, blue_words, green_words):
@@ -53,7 +54,7 @@ lexer = KeywordLexer(tokens.quick.keys(), tokens.monadic.keys(), tokens.dyadic.k
 def eval_args(string_args):
     string_args_split = string_args.split(' ')
     assert len(string_args_split) in (1,2)
-    return [eval(arg) for arg in string_args_split]
+    return [literal_eval(arg) for arg in string_args_split]
 
 def main():
     session = PromptSession(lexer=lexer, style=style)
