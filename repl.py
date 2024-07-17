@@ -50,20 +50,28 @@ green_words = ["pair"]
 # Create the custom lexer
 lexer = KeywordLexer(tokens.quick.keys(), tokens.monadic.keys(), tokens.dyadic.keys())
 
+def eval_args(string_args):
+    string_args_split = string_args.split(' ')
+    assert len(string_args_split) in (1,2)
+    return [eval(arg) for arg in string_args_split]
+
 def main():
     session = PromptSession(lexer=lexer, style=style)
 
-    string_args = session.prompt('Provide argumemnts: ').rstrip()
-    string_args_split = string_args.split('\n')
-    assert len(string_args_split) in (1,2)
-    args = [eval(arg) for arg in string_args_split]
+    string_args = session.prompt('Provide argumemnts: ').strip()
+    args = eval_args(string_args)
 
     for i in itertools.count(0):
-        code = session.prompt(f'{string_args} >> ')
-        try:
-            print('\n', lark_parser.evaluate_code(code, args), '\n')
-        except Exception as e:
-            print(f"error: {e}\n")
+        input = session.prompt(f'{string_args} >> ')
+        match input:
+            case _ if input.startswith('!set'):
+                string_args = input.removeprefix('!set').strip()
+                args = eval_args(string_args)
+            case _:
+                try:
+                    print('\n', lark_parser.evaluate_code(input, args), '\n')
+                except Exception as e:
+                    print(f"error: {e}\n")
             
             
 

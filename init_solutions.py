@@ -1,5 +1,29 @@
 import os
 import toml
+import sys
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-a', action='store_true', help="append new example to puzzels.toml")
+args = parser.parse_args()
+
+if args.a:
+    with open('puzzles.toml', 'a') as file:
+        new_example = """
+[[puzzles]]
+name = ""
+links = [""]
+[[puzzles.examples]]
+args = []
+result = 
+[[puzzles.examples]]
+args = []
+result = 
+"""
+        file.write(new_example)
+
+    exit(0)
+
 
 # Read the TOML file
 with open('puzzles.toml', 'r') as file:

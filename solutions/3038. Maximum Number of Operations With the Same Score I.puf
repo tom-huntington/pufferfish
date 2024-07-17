@@ -1,0 +1,1 @@
+\ len idiv 2 take c + 2 chunk_fold . = head sum
