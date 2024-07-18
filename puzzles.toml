@@ -50,3 +50,41 @@ result = 0
 [[puzzles.examples]]
 args = [[4, 3, 2, 1]]
 result = 2
+
+[[puzzles]]
+name = "1380. Lucky Numbers in a Matrix"
+links = ["https://leetcode.com/problems/lucky-numbers-in-a-matrix/description/", "https://theweeklychallenge.org/blog/perl-weekly-challenge-251/"]
+ignore = true
+[[puzzles.examples]]
+args = [[[3,7,8],[9,11,13],[15,16,17]]]
+result = [15]
+[[puzzles.examples]]
+args = [[[1,10,4,2],[9,3,8,7],[15,16,17,12]]]
+result = [12]
+[[puzzles.examples]]
+args = [[[7,8],[1,2]]]
+result = [7]
+
+[[puzzles]]
+name = "2778. Sum of Squares of Special Elements "
+links = ["https://leetcode.com/problems/sum-of-squares-of-special-elements/description/", "https://theweeklychallenge.org/blog/perl-weekly-challenge-251/"]
+ignore = true
+[[puzzles.examples]]
+args = [[1,2,3,4]]
+result = 21
+[[puzzles.examples]]
+args = [[2,7,1,19,18,3]]
+result = 63
+
+[[puzzles]]
+name = "1365. How Many Numbers Are Smaller Than the Current Number"
+links = ["https://leetcode.com/problems/how-many-numbers-are-smaller-than-the-current-number/description/", "https://theweeklychallenge.org/blog/perl-weekly-challenge-257/"]
+[[puzzles.examples]]
+args = [[8,1,2,2,3]]
+result = [4,0,1,1,3]
+[[puzzles.examples]]
+args = [[6,5,4,8]]
+result = [2,1,0,3]
+[[puzzles.examples]]
+args = [[7,7,7,7]]
+result = [0,0,0,0]

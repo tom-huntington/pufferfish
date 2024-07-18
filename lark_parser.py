@@ -47,6 +47,7 @@ class LinkTransformer(Transformer):
         name, *hof_arguments = children
         link = make_link_for_quick_hyper(name, hof_arguments)
         if link.arity != 1:
+            print(f"You specified the wrong link arity for hof: {name}")
             pass
         assert link.arity == 1
         return link
@@ -55,6 +56,7 @@ class LinkTransformer(Transformer):
         name, *hof_arguments = children
         link = make_link_for_quick_hyper(name, hof_arguments)
         if link.arity != 2:
+            print(f"You specified the wrong link arity for hof: {name}")
             pass
         assert link.arity == 2
         return link
@@ -84,7 +86,7 @@ def make_link(ast):
 
 def evaluate_code_ignoring_default_args(code, args):
     code = code.lstrip()
-    if code[0] == '@':
+    if next(iter(code), None) == '@':
         _, code = code.split('\n', 1)
     
     return evaluate_code(code, args)

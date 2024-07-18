@@ -15,6 +15,7 @@ all_tests_passed = True
 
 # Iterate over puzzles
 for puzzle in data['puzzles']:
+    if puzzle.get('ignore', None): continue
     name = puzzle['name']
     code_file = f'solutions/{name}.puf'
     
