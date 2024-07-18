@@ -75,7 +75,5 @@ Jelly also has explicit higher order functions. Pufferfish requires you to speci
 | [3028. Ant on the Boundary](https://leetcode.com/contest/weekly-contest-383/problems/ant-on-the-boundary/) | `\ sums = 0 sum` |
 | [3038. Maximum Number of Operations With the Same Score I](https://leetcode.com/contest/biweekly-contest-124/problems/maximum-number-of-operations-with-the-same-score-i/) | `\ len idiv 2 c{take} chunk_fold(+ 2) \ = head . sum` |
 | [PWC 250 - Task 1: Smallest Index](https://theweeklychallenge.org/blog/perl-weekly-challenge-250/) | `\ len iota0 . mod 10 = . \| keep head` |
-| [1380. Lucky Numbers in a Matrix](https://leetcode.com/problems/lucky-numbers-in-a-matrix/description/) | `` |
-| [2778. Sum of Squares of Special Elements ](https://leetcode.com/problems/sum-of-squares-of-special-elements/description/) | `\ divs? len . * sq \ sum` |
 | [1365. How Many Numbers Are Smaller Than the Current Number](https://leetcode.com/problems/how-many-numbers-are-smaller-than-the-current-number/description/) | `\ w(outer{<}) each(sum)` |
 | [1295. Find Numbers with Even Number of Digits](https://leetcode.com/problems/find-numbers-with-even-number-of-digits/) | `\ i_to_d \ len_each \ odd? \ not sum` |
