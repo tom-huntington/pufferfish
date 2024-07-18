@@ -3,7 +3,7 @@
 Pufferfish is an alternative syntax for [Jello](https://github.com/codereport/jello)
 / 🪼 [Jellyfish](https://github.com/codereport/jellyfish) 🪼
 
-Jello/Jellyfish is based on the idea that we an build up arbitrary functions by composing builtins (i.e. `sort`, `head`) with two variadic functions (higher order).
+Jello/Jellyfish is based on the idea that we an build up arbitrary functions by composing builtins (i.e. `sort`, `head`) with two variadic functions.
 ```c++
 is_unary_invocable auto F₁(is_invocable auto ...fns)
 is_binary_invocable auto F₂(is_invocable auto ...fns)
@@ -18,14 +18,14 @@ We can make calls to `F₁` and `F₂` implicit by using parentheses `()` and cu
 ```
 ((((tail sort) take 2) pair head) (flat sum))
 ```
-Closing parentheses (`)` and `}`) at the end of the scope are unnecessary to disambiguate the syntax.
+Closing parentheses, `)` and `}`, at the end of the scope are unnecessary to disambiguate the syntax.
 We can replace the corresponding opening parenthesis with `\` and `|` respectively and omit the closing parenthesis.
 
 ```
 \ (((tail sort) take 2) pair head) \ flat sum
 ```
 
-Opening parentheses (`(` and `{`) at the start of the scope are again unnecessary to disambiguate the syntax.
+Opening parentheses, `(` and `{`, at the start of the scope are again unnecessary to disambiguate the syntax.
 We can replace the corresponding closing parenthesis with `.` and `:` respectively and omit the opening parenthesis.
 
 ```
@@ -68,6 +68,7 @@ They can be described by the following tables for `F₁` and `F₂` respectively
 Jelly also has explicit higher order functions. Pufferfish requires you to specify the arity of the result by whether you use braces `{}` or parenthese `()` at the call site i.e. `hof_name(func1 func2)` for a monadic result.
 
 # Examples
+The solutions are [@codereport](https://github.com/codereport)'s https://github.com/codereport/jello/blob/main/challenges.md.
 | Problem | Solution |
 |---------|----------|
 | [3005. Count Elements With Maximum Frequency](https://leetcode.com/contest/weekly-contest-380/problems/count-elements-with-maximum-frequency/) | `\ key{len} . \ idx_max at_idx . sum` |
@@ -77,3 +78,4 @@ Jelly also has explicit higher order functions. Pufferfish requires you to speci
 | [PWC 250 - Task 1: Smallest Index](https://theweeklychallenge.org/blog/perl-weekly-challenge-250/) | `\ len iota0 . mod 10 = . \| keep head` |
 | [1365. How Many Numbers Are Smaller Than the Current Number](https://leetcode.com/problems/how-many-numbers-are-smaller-than-the-current-number/description/) | `\ w(outer{<}) each(sum)` |
 | [1295. Find Numbers with Even Number of Digits](https://leetcode.com/problems/find-numbers-with-even-number-of-digits/) | `\ i_to_d \ len_each \ odd? \ not sum` |
+| [2859. Sum of Values at Indices With K Set Bits](https://leetcode.com/problems/sum-of-values-at-indices-with-k-set-bits/description/) | `\| (len iota0 . bits) = r * l \ sum` |

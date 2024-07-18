@@ -3,7 +3,7 @@
 Pufferfish is an alternative syntax for [Jello](https://github.com/codereport/jello)
 / 🪼 [Jellyfish](https://github.com/codereport/jellyfish) 🪼
 
-Jello/Jellyfish is based on the idea that we an build up arbitrary functions by composing builtins (i.e. `sort`, `head`) with two variadic functions (higher order).
+Jello/Jellyfish is based on the idea that we an build up arbitrary functions by composing builtins (i.e. `sort`, `head`) with two variadic functions.
 ```c++
 is_unary_invocable auto F₁(is_invocable auto ...fns)
 is_binary_invocable auto F₂(is_invocable auto ...fns)
@@ -18,14 +18,14 @@ We can make calls to `F₁` and `F₂` implicit by using parentheses `()` and cu
 ```
 ((((tail sort) take 2) pair head) (flat sum))
 ```
-Closing parentheses (`)` and `}`) at the end of the scope are unnecessary to disambiguate the syntax.
+Closing parentheses, `)` and `}`, at the end of the scope are unnecessary to disambiguate the syntax.
 We can replace the corresponding opening parenthesis with `\` and `|` respectively and omit the closing parenthesis.
 
 ```
 \ (((tail sort) take 2) pair head) \ flat sum
 ```
 
-Opening parentheses (`(` and `{`) at the start of the scope are again unnecessary to disambiguate the syntax.
+Opening parentheses, `(` and `{`, at the start of the scope are again unnecessary to disambiguate the syntax.
 We can replace the corresponding closing parenthesis with `.` and `:` respectively and omit the opening parenthesis.
 
 ```
