@@ -39,3 +39,9 @@ We only need `.` and `:` to disambiguate the syntax when we are taking less than
 ```
 
 # Examples
+| Problem | Solution |
+|---------|----------|
+| [3005. Count Elements With Maximum Frequency](https://leetcode.com/contest/weekly-contest-380/problems/count-elements-with-maximum-frequency/) | `\ key{len} . \ idx_max at_idx . sum` |
+| [3010. Divide an Array Into Subarrays With Minimum Cost I](https://leetcode.com/contest/biweekly-contest-122/problems/divide-an-array-into-subarrays-with-minimum-cost-i/) | `\ tail sort . take 2 pair head \ flat sum` |
+| [3028. Ant on the Boundary](https://leetcode.com/contest/weekly-contest-383/problems/ant-on-the-boundary/) | `\ sums = 0 sum` |
+| [3038. Maximum Number of Operations With the Same Score I](https://leetcode.com/contest/biweekly-contest-124/problems/maximum-number-of-operations-with-the-same-score-i/) | `\ len idiv 2 c{take} chunk_fold(+ 2) \ = head . sum` |

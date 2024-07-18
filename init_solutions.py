@@ -5,7 +5,53 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-a', action='store_true', help="append new example to puzzels.toml")
+
+subparser_readme = parser.add_subparsers(dest='command', help='Subcommands')
+create_parser = subparser_readme.add_parser('readme', help='Generate the readme')
+
 args = parser.parse_args()
+
+match args.command:
+    case "readme":
+        def get_solution(problem_name):
+            solution_file = f"solutions/{problem_name}.puf"
+            try:
+                with open(solution_file, 'r') as f:
+                    return f.read().strip()
+            except FileNotFoundError:
+                return "Solution not found"
+
+        def generate_markdown_table(data):
+            markdown_table = "| Problem | Solution |\n|---------|----------|\n"
+    
+            for puzzle in data['puzzles']:
+                problem_name = puzzle['name']
+                link = puzzle['links'][0] if puzzle['links'] else ''
+                example, *_ = puzzle['examples']
+                solution = get_solution(problem_name)
+    
+                markdown_table += f"| [{problem_name}]({link}) | `{solution}` |\n"
+    
+            return markdown_table
+
+        # Load the TOML data from file
+        toml_file = "puzzles.toml"  # replace with your TOML file name
+        with open(toml_file, 'r') as f:
+            data = toml.load(f)
+
+        # Generate the Markdown table
+        markdown_table = generate_markdown_table(data)
+
+        with open("README_TEMPLATE.md") as f:
+            template = f.read()
+
+        with open("README.md", 'w') as f:
+            f.write(template)
+            f.write('\n')
+            f.write(markdown_table)
+
+        exit(0)
+
 
 if args.a:
     with open('puzzles.toml', 'a') as file:
