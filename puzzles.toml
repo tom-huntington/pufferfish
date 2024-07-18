@@ -98,3 +98,13 @@ result = 2
 [[puzzles.examples]]
 args = [[555,901,482,1771]]
 result = 1
+
+[[puzzles]]
+name = "2859. Sum of Values at Indices With K Set Bits"
+links = ["https://leetcode.com/problems/sum-of-values-at-indices-with-k-set-bits/description/"]
+[[puzzles.examples]]
+args = [[5,10,1,5,2], 1]
+result = 13
+[[puzzles.examples]]
+args = [[4,3,2,1], 2]
+result = 1
