@@ -111,15 +111,9 @@ class NodeTransformer(Transformer):
     
     def hof(self, children):
         quick_name, *hof_arguments = children
-        q = jelly.interpreter.quicks.get(tokens.quick.get(quick_name, None), None)
-        # assert q.condition(hof_arguments)
-        link, = q.quicklink(hof_arguments, [], None)
-        return HofWrapper(link, quick_name.value, hof_arguments)
-        quick_name, *hof_arguments = children
-        q = jelly.interpreter.quicks.get(tokens.quick.get(quick_name, None), None)
-        assert q.condition(hof_arguments)
-        link, = q.quicklink(hof_arguments, [], None)
-        return link
+        link = lark_parser.make_link_for_quick_hyper(quick_name, [arg.link for arg in hof_arguments])
+        res = HofWrapper(link, quick_name.value, hof_arguments)
+        return res
     
     def literal(self, children):
         child, = children

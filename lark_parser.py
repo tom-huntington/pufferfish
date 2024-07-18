@@ -12,22 +12,16 @@ def func(arity, children):
     link = apply_combinator([c.link for c in children], arity)
     return InteriorWrapper(link, None, children)
 
-class JelloTransformer(Transformer):
-    def builtin(self, tokens):
-        token, = tokens
-        s = token.value
-        if link := jelly.interpreter.atoms.get(jello.to_jelly(s), None):
-            pass
-        elif jelly_token := jello_tokens.quick.get(s, None):
-            return hof_token(s, jelly_token, hof_arity[s])
-        else: link = create_constant(None, s)
-        ret = LeafWrapper(link, s)
-        return ret
+def make_link_for_quick_hyper(key, hof_arguments):
 
-    def monad(self, children):
-        return func(1, children)
-    def dyad(self, children):
-        return func(2, children)
+    jello_name = jello.to_jelly(key)
+    if q := jelly.interpreter.quicks.get(jello_name, None):
+        assert q.condition(hof_arguments)
+        link, = q.quicklink(hof_arguments, [], None)
+        return link
+    else:
+        link, = hof_arguments
+        return jelly.interpreter.hypers[jello_name](link)
 
 class LinkTransformer(Transformer):
     def builtin(self, tokens):
@@ -50,23 +44,21 @@ class LinkTransformer(Transformer):
         return attrdict(call=(lambda: value), arity=0)
     
     def hof(self, children):
-        quick_name, *hof_arguments = children
-        q = jelly.interpreter.quicks.get(tokens.quick.get(quick_name, None), None)
-        assert q.condition(hof_arguments)
-        link, = q.quicklink(hof_arguments, [], None)
+        name, *hof_arguments = children
+        link = make_link_for_quick_hyper(name, hof_arguments)
         return link
     
-parser = Lark(run_lark.grammar, debug=False)
+parser = Lark(run_lark.grammar, debug=False, lexer="auto")
 
 sample_string = """\
 \ i scan pair .
 """
 
 def puffer_parse(code):
+    print("code\n", code)
     for t in parser.lex(code):
         print((t.line, t.column), repr(t))
 
-    print("code\n", code)
     syntax_tree = parser.parse(code)
     print(syntax_tree.data, "\n----")
     print(syntax_tree.pretty())
