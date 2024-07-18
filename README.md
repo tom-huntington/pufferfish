@@ -8,7 +8,7 @@ Jello/Jellyfish is based on the idea that we an build up arbitrary functions by 
 is_unary_invocable auto F₁(is_invocable auto ...fns)
 is_binary_invocable auto F₂(is_invocable auto ...fns)
 ```
-For example the following [leetcode](https://leetcode.com/contest/biweekly-contest-122/problems/divide-an-array-into-subarrays-with-minimum-cost-i/) solution:
+For example, consider the following [leetcode](https://leetcode.com/contest/biweekly-contest-122/problems/divide-an-array-into-subarrays-with-minimum-cost-i/) solution:
 ```
 F₁(F₁(F₁(F₁(tail sort) take 2) pair head) F₁(flat sum))
 ```
@@ -38,7 +38,7 @@ We can omit `.` and `:` when we have exactly three arguments:
 \ tail sort . take 2 pair head \ flat sum
 ```
 
-## `F₁` and `F₂`
+## Definition of `F₁` and `F₂`
 
 `F₁` and `F₂` are solely determined by the arity of their arguments.
 They can be described by the following tables for `F₁` and `F₂` respectively.
@@ -55,7 +55,7 @@ They can be described by the following tables for `F₁` and `F₂` respectively
 | Arities | Combinator | Definition |
 | --- | --- | -- |
 | (2, 2, 2)  |  Φ₁ | `fn Φ₁(f,g,h) = x,y -> g(f(x,y),h(x,y))` |
-| (2, 2) |  ε | `fn = ε(f,g) = x,y -> g(f(x,y), y)` |
+| (2, 2) |  ε | `fn ε(f,g) = x,y -> g(f(x,y), y)` |
 | (1, 2, 1) |  D₂ | `fn d₂(f,g,h) = x,y -> f(g(x),h(y))` |
 | (2, 1) |  B₁ |`fn b₁(f,g) = x,y -> g(f(x,y))` |
 | (1, 2, 2) |  Φ.₂ | `fn Φ.₂(f,g,h) = x,y -> g(f(x),h(x,y))` |
@@ -74,3 +74,8 @@ Jelly also has explicit higher order functions. Pufferfish requires you to speci
 | [3010. Divide an Array Into Subarrays With Minimum Cost I](https://leetcode.com/contest/biweekly-contest-122/problems/divide-an-array-into-subarrays-with-minimum-cost-i/) | `\ tail sort . take 2 pair head \ flat sum` |
 | [3028. Ant on the Boundary](https://leetcode.com/contest/weekly-contest-383/problems/ant-on-the-boundary/) | `\ sums = 0 sum` |
 | [3038. Maximum Number of Operations With the Same Score I](https://leetcode.com/contest/biweekly-contest-124/problems/maximum-number-of-operations-with-the-same-score-i/) | `\ len idiv 2 c{take} chunk_fold(+ 2) \ = head . sum` |
+| [PWC 250 - Task 1: Smallest Index](https://theweeklychallenge.org/blog/perl-weekly-challenge-250/) | `\ len iota0 . mod 10 = . | keep head` |
+| [1380. Lucky Numbers in a Matrix](https://leetcode.com/problems/lucky-numbers-in-a-matrix/description/) | `` |
+| [2778. Sum of Squares of Special Elements ](https://leetcode.com/problems/sum-of-squares-of-special-elements/description/) | `\ divs? len . * sq \ sum` |
+| [1365. How Many Numbers Are Smaller Than the Current Number](https://leetcode.com/problems/how-many-numbers-are-smaller-than-the-current-number/description/) | `\ w(outer{<}) each(sum)` |
+| [1295. Find Numbers with Even Number of Digits](https://leetcode.com/problems/find-numbers-with-even-number-of-digits/) | `\ i_to_d \ len_each \ odd? \ not sum` |
