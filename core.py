@@ -125,27 +125,27 @@ def parse_parentheses(expression):
 
 
 combinators = {
-    'phi1': lambda f, g, h: attrdict(
+    'Φ₁': lambda f, g, h: attrdict(
         arity = 2,
         call = lambda x, y: dyadic_link(g, (dyadic_link(f, (x,y)), dyadic_link(h, (x, y))))
     ),
-    'phi.2': lambda f, g, h: attrdict(
+    'Φ.₂': lambda f, g, h: attrdict(
         arity = 2,
         call = lambda x, y: dyadic_link(g, (monadic_link(f, x), dyadic_link(h, (x, y))))
     ),
-    'D2': lambda f, g, h: attrdict(
+    'D₂': lambda f, g, h: attrdict(
         arity = 2,
         call = lambda x, y: dyadic_link(g, (monadic_link(f, x), monadic_link(h, x)))
     ),
-    # 'psi': lambda f, g: attrdict(
+    # 'Ψ': lambda f, g: attrdict(
     #     arity = 2,
     #     call = lambda x, y: dyadic_link(g, (monadic_link(f, x), monadic_link(f, y)))
     # ),
-    'delta': lambda f, g: attrdict(
+    'Δ': lambda f, g: attrdict(
         arity = 2,
         call = lambda x, y: dyadic_link(g, (monadic_link(f, x), y))
     ),
-    'B1': lambda f, g: attrdict(
+    'B₁': lambda f, g: attrdict(
         arity = 2,
         call = lambda x, y: monadic_link(g, dyadic_link(f, (x, y)))
     ),
@@ -153,16 +153,16 @@ combinators = {
         arity = 2,
         call = lambda x, _: monadic_link(g, monadic_link(f, x))
     ),
-    'eps': lambda f, g: attrdict(
+    'ε': lambda f, g: attrdict(
         arity = 2,
         call = lambda x, y: dyadic_link(g, (dyadic_link(f, (x, y)), y)) 
     ),
-    'phi': lambda f, g, h: attrdict(
+    'Φ': lambda f, g, h: attrdict(
         arity = 1,
         call = lambda x: dyadic_link(g, (monadic_link(f, x), monadic_link(h, x)))
     ),
     #             1  2
-    'sig': lambda f, g: attrdict(
+    'Σ': lambda f, g: attrdict(
         arity = 1,
         call = lambda x: dyadic_link(g, (monadic_link(f, x), x))
     ),
@@ -191,33 +191,31 @@ combinators = {
         call = lambda x: dyadic_link(g, (niladic_link(f), x))
     ),
     #
-    'phik': lambda f, g, h: attrdict(
+    'Φₖ': lambda f, g, h: attrdict(
         arity = 1,
         call = lambda x: dyadic_link(g, (monadic_link(f, x), niladic_link(h))),
     )
 }
 
+
+
 jelly_dyadic_rules = {
-    (2, 2, 2) : "phi1",
-    (2, 2): "eps",
-    (1, 2, 1): "D2",
-    (2, 1): "B1",
-    (1, 2, 2): "phi.2",
-    (1, 2): "delta",
-    (1, 1): "B.3",
+    (2, 2, 2) : "Φ₁",
+    (2, 2): "ε",
+    (1, 2, 1): "D₂",
+    (2, 1): "B₁",
+    (1, 2, 2): "Φ.₂",
+    (1, 2): "Δ",
+    (1, 1): "B.₃",
     (2,): "I",
 }
 
 jelly_monadic_rules = {
-    (1, 2, 1) : "phi",
-    (1, 2): "sig",
-    (1, 1): "B",
-    (2, 1): "S",
-    (2,): "W",
+    kkk,
     (1,): "I",
     (2, 0): "bb",
     (0, 2): "bf",
-    (1, 2, 0): "phik",
+    (1, 2, 0): "Φₖ",
 }
 
 def get_arity(o):
