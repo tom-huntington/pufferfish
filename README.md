@@ -1,64 +1,41 @@
 # <p align="center">🐡 Pufferfish 🐡</p>
 
-
-# Notes
-The syntax is either explicit (`.` and `:`) or regular.
-You do *not* need to know the arities to determine the combinator groupings.
-(although you do need to know arities to determine which combinator results from a group)
-
-An alternative syntax for [Jello](https://github.com/codereport/jello)
+Pufferfish is an alternative syntax for [Jello](https://github.com/codereport/jello)
 / 🪼 [Jellyfish](https://github.com/codereport/jellyfish) 🪼
 
-We can build functions by specifying trees where the leaf nodes are literals, and interior nodes are combinators.
-
-Which combinator an interior node has is determined by both it's arity and the arities of it's children i.e. by our choice of a function `F`
+Jello/Jellyfish is based on the idea that we an build up arbitrary functions by composing builtins (i.e. `sort`, `head`) with two variadic functions
+```c++
+std::is_unary_invocable auto F₁(std::is_invocable auto ...fns)
+std::is_binary_invocable auto F₂(std::is_invocable auto ...fns)
 ```
-F : (arity : Int) -> List Int -> Combinator arity
+For example:
 ```
-
-We can then fold any such tree down into single function. Composition is all you need.
-
-
-Since our trees are left leaning we will optimize our syntax for this and introduce `|` as a `cons` operator
-```
-[[[a b] c d] e] == [a b | c d | e]
+F₁(F₁(F₁(F₁(tail sort) take 2) pair head) F₁(flat sum))
 ```
 
-We will also specify the arity, using parentheses `()` for trees that fold to monadic (unary) functions, and `{}` parentheses for trees that fold to dyadic (binary) functions. Again we will make an optimization for left leaning trees: combinators on the left branch will inherit their arity form their parent.
+We can make calls to `F₁` and `F₂` implicit by using curly braces `{}` for `F₂` and parentheses `()` for `F₁`.
 
-TODO:
-- [ ] Python syntax using indenting and line breaks to replace Lisp style nested parentheses
-- [ ] Read Buffer Evaluate Loop
-- [ ] Plot the combinator trees in terminal
-
-
-
-# Notes
-
-To read code, there programmer must parse the operator precedence, associativity and arity.
-These operator languages can be different levels in the chompsky hierachy.
-
-Take for example a language where all operators are binary and have the same level of precedence and are all left associative.
-
-To parse the operator all is necessary is to determine whether an identifier is even or odd.
 ```
-a   b c  d f  g h
-0   1 2  3 4  5 6
-((a b c) d f) g h
+((((tail sort) take 2) pair head) (flat sum))
 ```
-Odd identifiers are the operators, even identifiers are the operands.
-The left operand is whatever the expression of everything on the left evaluates to.
+Closing parentheses `})` at the end of the scope are unnecessary to disambiguate the syntax.
+We can replace the corresponding opening parenthesis/brace with `\`/`|` and omit the closing parenthesis/brace.
 
-This is a regular grammar.
+```
+\ (((tail sort) take 2) pair head) \ flat sum
+```
 
-However, in languages with ambivalence the operator grammar becomes context sentitive.
-The arity of an identifier changes depending on the previous context.
+Opening parentheses `{(` at the start of the scope are again unnecessary to disambiguate the syntax.
+We can replace the corresponding closing parenthesis/brace with `.`/`:` and omit the opening parenthesis/brace.
 
-Jelly removes ambivalence but the pattern matching rules once again mean the what combinator the identifier is a operand of (and what position it is in) changes depending on the previous context.
+```
+\ tail sort . take 2 . pair head . \ flat sum
+```
 
-The operator grammar being context sentitive makes array language very hard to read.
+It turns out that `F₁` and `F₂` only take at most 3 arguments.
+We only need `.` and `:` to disambiguate the syntax when we are taking less than three arguments:
+```
+\ tail sort . take 2 pair head \ flat sum
+```
 
-Pufferfish solves this by the Lisp way by explicitly specifying the parentheses.
-
-
-
+# Examples
