@@ -8,7 +8,7 @@ Jello/Jellyfish is based on the idea that we an build up arbitrary functions by 
 is_unary_invocable auto F₁(is_invocable auto ...fns)
 is_binary_invocable auto F₂(is_invocable auto ...fns)
 ```
-For example the following [leetcode](https://leetcode.com/contest/biweekly-contest-122/problems/divide-an-array-into-subarrays-with-minimum-cost-i/) solution:
+For example, consider the following [leetcode](https://leetcode.com/contest/biweekly-contest-122/problems/divide-an-array-into-subarrays-with-minimum-cost-i/) solution:
 ```
 F₁(F₁(F₁(F₁(tail sort) take 2) pair head) F₁(flat sum))
 ```

@@ -4,10 +4,11 @@ import sys
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-a', action='store_true', help="append new example to puzzels.toml")
 
-subparser_readme = parser.add_subparsers(dest='command', help='Subcommands')
-create_parser = subparser_readme.add_parser('readme', help='Generate the readme')
+subparser = parser.add_subparsers(dest='command', help='Subcommands')
+readme_parser = subparser.add_parser('readme', help='Generate the readme')
+add_parser = subparser.add_parser('add', help='Add skeleton')
+add_parser.add_argument('type', help="Add puzzle to toml file or add file to solutions dir")
 
 args = parser.parse_args()
 
@@ -52,10 +53,12 @@ match args.command:
 
         exit(0)
 
-
-if args.a:
-    with open('puzzles.toml', 'a') as file:
-        new_example = """
+    case "add":
+        xx = args.type
+        match args.type:
+            case "toml":
+                with open('puzzles.toml', 'a') as file:
+                    new_example = """
 [[puzzles]]
 name = ""
 links = [""]
@@ -66,31 +69,32 @@ result =
 args = []
 result = 
 """
-        file.write(new_example)
+                    file.write(new_example)
+                
+                print("written new example to puzzles.toml")
+                exit(0)
 
-    exit(0)
+            case "solutions":
+                # Read the TOML file
+                with open('puzzles.toml', 'r') as file:
+                    data = toml.load(file)
 
+                # Directory where .puf files should be created
+                solutions_dir = 'solutions/'
 
-# Read the TOML file
-with open('puzzles.toml', 'r') as file:
-    data = toml.load(file)
+                # Ensure the solutions directory exists
+                # os.makedirs(solutions_dir, exist_ok=True)
 
-# Directory where .puf files should be created
-solutions_dir = 'solutions/'
-
-# Ensure the solutions directory exists
-# os.makedirs(solutions_dir, exist_ok=True)
-
-# Iterate over puzzles in the TOML data
-for puzzle in data['puzzles']:
-    puzzle_name = puzzle['name']
-    file_name = f"{puzzle_name}.puf"
-    file_path = os.path.join(solutions_dir, file_name)
+                # Iterate over puzzles in the TOML data
+                for puzzle in data['puzzles']:
+                    puzzle_name = puzzle['name']
+                    file_name = f"{puzzle_name}.puf"
+                    file_path = os.path.join(solutions_dir, file_name)
     
-    # Check if the file exists, if not, create it
-    if not os.path.exists(file_path):
-        with open(file_path, 'w') as f:
-            pass  # Create an empty file
+                    # Check if the file exists, if not, create it
+                    if not os.path.exists(file_path):
+                        with open(file_path, 'w') as f:
+                            pass  # Create an empty file
 
-print("Missing files have been created.")
+                print("Missing files have been created.")
 

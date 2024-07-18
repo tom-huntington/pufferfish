@@ -40,3 +40,13 @@ result = 2
 [[puzzles.examples]]
 args = [[3,2,6,1,4]]
 result = 1
+
+[[puzzles]]
+name = "PWC 250 - Task 1: Smallest Index"
+links = ["https://theweeklychallenge.org/blog/perl-weekly-challenge-250/"]
+[[puzzles.examples]]
+args = [[0, 1, 2]]
+result = 0
+[[puzzles.examples]]
+args = [[4, 3, 2, 1]]
+result = 2

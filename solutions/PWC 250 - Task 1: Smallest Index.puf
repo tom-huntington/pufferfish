@@ -1,0 +1,1 @@
+\ len iota0 . mod 10 = . | keep head
