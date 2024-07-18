@@ -43,15 +43,26 @@ class LinkTransformer(Transformer):
         value = literal_eval(literal_as_str)
         return attrdict(call=(lambda: value), arity=0)
     
-    def hof(self, children):
+    def hofm(self, children):
         name, *hof_arguments = children
         link = make_link_for_quick_hyper(name, hof_arguments)
+        if link.arity != 1:
+            pass
+        assert link.arity == 1
+        return link
+
+    def hofd(self, children):
+        name, *hof_arguments = children
+        link = make_link_for_quick_hyper(name, hof_arguments)
+        if link.arity != 2:
+            pass
+        assert link.arity == 2
         return link
     
 parser = Lark(run_lark.grammar, debug=False, lexer="auto")
 
 sample_string = """\
-\ i scan pair .
+\ add1 scan pair .
 """
 
 def puffer_parse(code):
@@ -60,7 +71,7 @@ def puffer_parse(code):
         print((t.line, t.column), repr(t))
 
     syntax_tree = parser.parse(code)
-    print(syntax_tree.data, "\n----")
+    print(syntax_tree, "\n----")
     print(syntax_tree.pretty())
     return syntax_tree
 

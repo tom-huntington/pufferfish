@@ -1,2 +1,2 @@
 @ [1,2,2,3,1,4]
-\ key len . \ idx_max at_idx . sum
+\ key{len} . \ idx_max at_idx . sum

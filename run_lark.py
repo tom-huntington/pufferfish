@@ -16,10 +16,12 @@ monad3: (monad "." | monad3 | func) func (func_end | func) -> monad
 dyad: (dyad3)? (func)? (func_end | func) | dyad "." (func)? (func_end | func) | dyad3
 dyad3: (dyad ":" | dyad3 | func) func (func_end | func) -> dyad
 ?func_end: "\\\\" monad | "|" dyad
-?func: "(" monad ")" | "{{" dyad "}}" | hof | builtin | literal
-!hof: (HOFS1 func) | (HOFS2 func func)
-HOFS1: {hofs1}
-HOFS2 . 1: {hofs2}
+?func: "(" monad ")" | "{{" dyad "}}" | _hof | builtin | literal
+hofm: HOF1 "(" func ")" | HOF2 "(" func~2 ")"
+hofd: HOF1 "{{" func  "}}" | HOF2 "{{" func~2 "}}"
+_hof: hofm | hofd
+HOF1: {hofs1}
+HOF2 . 1: {hofs2}
 builtin: BUILTIN_DYAD | BUILTIN_MONAD
 BUILTIN_DYAD: {' | '.join(f'"{a}"' for a in tokens.dyadic.keys())}
 BUILTIN_MONAD: {' | '.join(f'"{a}"' for a in tokens.monadic.keys() if a not in ["part", "i"])}
@@ -52,7 +54,7 @@ literal: number
 print(grammar)
 
 sample_string ="""\
-| chunk_fold + 2"""
+| chunk_fold(+ 2)"""
 # sample_string="\ scan pair"
 # logger.setLevel(logging.DEBUG)
 if __name__ == "__main__":

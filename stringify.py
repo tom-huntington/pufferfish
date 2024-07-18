@@ -94,10 +94,12 @@ class NodeTransformer(Transformer):
         return LeafWrapper(jelly.interpreter.atoms.get(jello.to_jelly(s)), s)
 
     def monad(self, children):
+        for c in children: assert c
         return InteriorWrapper(attrdict(arity=1), None, children)
         return apply_combinator([c for c in children if c is not None], 1)
 
     def dyad(self, children):
+        for c in children: assert c
         return InteriorWrapper(attrdict(arity=2), None, children)
         return apply_combinator([c for c in children if c is not None], 2)
     
@@ -114,6 +116,12 @@ class NodeTransformer(Transformer):
         link = lark_parser.make_link_for_quick_hyper(quick_name, [arg.link for arg in hof_arguments])
         res = HofWrapper(link, quick_name.value, hof_arguments)
         return res
+    
+    def hofd(self, children):
+        return self.hof(children)
+    
+    def hofm(self, children):
+        return self.hof(children)
     
     def literal(self, children):
         child, = children

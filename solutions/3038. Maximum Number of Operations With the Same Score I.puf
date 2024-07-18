@@ -1,1 +1,1 @@
-\ len idiv 2 c(take) chunk_fold{+ 2} \ = head . sum
+\ len idiv 2 c{take} chunk_fold(+ 2) \ = head . sum
