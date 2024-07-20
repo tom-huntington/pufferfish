@@ -2,10 +2,10 @@ from lark import Lark, Transformer, Tree, Token
 from lark.indenter import Indenter
 from core import *
 import run_lark
-import tokens
+# from jello.tokens import
 import argparse
 import stringify as puffer_stringify
-import jello
+import jello.jello
 from ast import literal_eval
 
 def func(arity, children):
@@ -14,7 +14,7 @@ def func(arity, children):
 
 def make_link_for_quick_hyper(key, hof_arguments):
 
-    jello_name = jello.to_jelly(key)
+    jello_name = jello.jello.to_jelly(key)
     if q := jelly.interpreter.quicks.get(jello_name, None):
         assert q.condition(hof_arguments)
         link, = q.quicklink(hof_arguments, [], None)
@@ -27,7 +27,7 @@ class LinkTransformer(Transformer):
     def builtin(self, tokens):
         token, = tokens
         s = token.value
-        link = jelly.interpreter.atoms.get(jello.to_jelly(s))
+        link = jelly.interpreter.atoms.get(jello.jello.to_jelly(s))
         return link
 
 

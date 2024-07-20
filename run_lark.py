@@ -1,10 +1,10 @@
 from lark import Lark, logger
 from lark.indenter import Indenter
-import tokens
+from jello.tokens import quick, dyadic, monadic
 import logging
 
 dyadic_quicks = ('chunk_fold', 'slide_fold')
-hofs1 = ' | '.join(f'"{k}"' for k in tokens.quick.keys() if k not in dyadic_quicks)
+hofs1 = ' | '.join(f'"{k}"' for k in quick.keys() if k not in dyadic_quicks)
 hofs2 = ' | '.join(f'"{k}"' for k in dyadic_quicks)
 # monads = ' | '.join(f'"{a} "' for a in [*tokens.dyadic.keys(), *tokens.monadic.keys()])
 
@@ -23,8 +23,8 @@ _hof: hofm | hofd
 HOF1: {hofs1}
 HOF2 . 1: {hofs2}
 builtin: BUILTIN_DYAD | BUILTIN_MONAD
-BUILTIN_DYAD: {' | '.join(f'"{a}"' for a in tokens.dyadic.keys())}
-BUILTIN_MONAD: {' | '.join(f'"{a}"' for a in tokens.monadic.keys() if a not in ["part", "i"])}
+BUILTIN_DYAD: {' | '.join(f'"{a}"' for a in dyadic.keys())}
+BUILTIN_MONAD: {' | '.join(f'"{a}"' for a in monadic.keys() if a not in ["part", "i"])}
 
 number: SIGNED_NUMBER
 literal: number

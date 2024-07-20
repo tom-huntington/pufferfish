@@ -6,7 +6,7 @@ from prompt_toolkit.styles import Style
 from prompt_toolkit.lexers import Lexer
 from prompt_toolkit.document import Document
 from prompt_toolkit.formatted_text import StyleAndTextTuples
-import tokens
+import jello.tokens
 from ast import literal_eval
 
 class KeywordLexer(Lexer):

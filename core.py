@@ -1,7 +1,7 @@
-import jello
 import jelly
-import tokens as jello_tokens
+from jello.tokens import quick
 from jello import utils
+from jello.jello import to_jelly
 from jelly.interpreter import *
 import itertools
 from typing import Callable, Any
@@ -340,9 +340,9 @@ def FoldCombinatorTree(l, index, parent_arity = None):
              
         case str(s):
             assert parent_arity is not None
-            if link := jelly.interpreter.atoms.get(jello.to_jelly(s), None):
+            if link := jelly.interpreter.atoms.get(to_jelly(s), None):
                 pass
-            elif jelly_token := jello_tokens.quick.get(s, None):
+            elif jelly_token := quick.get(s, None):
                 return hof_token(s, jelly_token, hof_arity[s])
             else: link = create_constant(parent_arity, s)
             ret = LeafWrapper(link, s)

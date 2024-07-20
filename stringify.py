@@ -9,10 +9,10 @@ from more_itertools import interleave_longest, windowed
 from itertools import repeat, accumulate
 from operator import add
 import lark_parser
-import jello
+import jello.jello
 from jelly.utils import attrdict
 import jelly
-import tokens
+import jello.tokens
 
 def stringify_2d_unicode(result : NDArray):
     return '\n'.join(''.join(row) for row in result)
@@ -91,7 +91,7 @@ class NodeTransformer(Transformer):
     def builtin(self, tokens):
         token, = tokens
         s = token.value
-        return LeafWrapper(jelly.interpreter.atoms.get(jello.to_jelly(s)), s)
+        return LeafWrapper(jelly.interpreter.atoms.get(jello.jello.to_jelly(s)), s)
 
     def monad(self, children):
         for c in children: assert c
