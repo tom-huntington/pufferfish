@@ -103,6 +103,8 @@ result = 1
 name = "2859. Sum of Values at Indices With K Set Bits"
 links = ["https://leetcode.com/problems/sum-of-values-at-indices-with-k-set-bits/description/"]
 [[puzzles.examples]]
+# https://github.com/uiri/toml/issues/445
+# pip install git+https://github.com/uiri/toml.git
 args = [[5,10,1,5,2], 1]
 result = 13
 [[puzzles.examples]]
