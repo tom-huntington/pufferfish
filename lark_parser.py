@@ -61,7 +61,7 @@ class LinkTransformer(Transformer):
         assert link.arity == 2
         return link
     
-parser = Lark(run_lark.grammar, debug=False, lexer="auto")
+parser = Lark(run_lark.grammar, debug=False, lexer="basic")
 
 sample_string = """\
 \ add1 scan pair .

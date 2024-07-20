@@ -24,7 +24,8 @@ HOF1: {hofs1}
 HOF2 . 1: {hofs2}
 builtin: BUILTIN_DYAD | BUILTIN_MONAD
 BUILTIN_DYAD: {' | '.join(f'"{a}"' for a in dyadic.keys())}
-BUILTIN_MONAD: {' | '.join(f'"{a}"' for a in monadic.keys() if a not in ["part", "i"])}
+BUILTIN_MONAD: {' | '.join(f'"{a}"' for a in monadic.keys() if a not in ["i"])}
+BUILTIN_MONAD_L . -1: "i"
 
 number: SIGNED_NUMBER
 literal: number
@@ -54,13 +55,13 @@ literal: number
 print(grammar)
 
 sample_string ="""\
-| chunk_fold(+ 2)"""
+| idiv"""
 # sample_string="\ scan pair"
 # logger.setLevel(logging.DEBUG)
 if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
     print(sample_string)
-    parser = Lark(grammar, debug=False, strict=True, lexer="basic")
+    parser = Lark(grammar, debug=False, strict=False, lexer="basic")
     for i, t in enumerate(parser.lex(sample_string)):
         print((t.line, t.column), repr(t))
     parse_tree = parser.parse(sample_string)

@@ -49,7 +49,7 @@ blue_words = ["add1"]
 green_words = ["pair"]
 
 # Create the custom lexer
-lexer = KeywordLexer(tokens.quick.keys(), tokens.monadic.keys(), tokens.dyadic.keys())
+lexer = KeywordLexer(jello.tokens.quick.keys(), jello.tokens.monadic.keys(), jello.tokens.dyadic.keys())
 
 def eval_args(string_args):
     string_args_split = string_args.split(' ')
