@@ -1,6 +1,6 @@
 import itertools
 from prompt_toolkit import PromptSession
-import lark_parser 
+import main as main_module
 from typing import Callable
 from prompt_toolkit.styles import Style
 from prompt_toolkit.lexers import Lexer
@@ -70,7 +70,7 @@ def main():
                 args = eval_args(string_args)
             case _:
                 try:
-                    print('\n', lark_parser.evaluate_code(input, args), '\n')
+                    print('\n', main_module.evaluate_code(input, args), '\n')
                 except Exception as e:
                     print(f"error: {e}\n")
             

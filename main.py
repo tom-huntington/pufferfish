@@ -1,7 +1,7 @@
 from lark import Lark, Transformer, Tree, Token
 from lark.indenter import Indenter
 from core import *
-import run_lark
+import grammar
 # from jello.tokens import
 import argparse
 import stringify as puffer_stringify
@@ -61,7 +61,7 @@ class LinkTransformer(Transformer):
         assert link.arity == 2
         return link
     
-parser = Lark(run_lark.grammar, debug=False, lexer="basic")
+parser = Lark(grammar.grammar, debug=False, lexer="basic")
 
 sample_string = """\
 \ add1 scan pair .

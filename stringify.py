@@ -8,7 +8,7 @@ import numpy as np
 from more_itertools import interleave_longest, windowed
 from itertools import repeat, accumulate
 from operator import add
-import lark_parser
+import main
 import jello.jello
 from jelly.utils import attrdict
 import jelly
@@ -113,7 +113,7 @@ class NodeTransformer(Transformer):
     
     def hof(self, children):
         quick_name, *hof_arguments = children
-        link = lark_parser.make_link_for_quick_hyper(quick_name, [arg.link for arg in hof_arguments])
+        link = main.make_link_for_quick_hyper(quick_name, [arg.link for arg in hof_arguments])
         res = HofWrapper(link, quick_name.value, hof_arguments)
         return res
     
@@ -134,6 +134,6 @@ if __name__ == "__main__":
     # c = puffer_eval(b, {}, default_args)
     # print(c)jjkkkk
 
-    ast = lark_parser.puffer_parse("\ key len . \ idx_max at_idx . sum")    
+    ast = main.puffer_parse("\ key len . \ idx_max at_idx . sum")    
     print(ast)
     print(stringify_tree(ast))

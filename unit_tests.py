@@ -1,7 +1,7 @@
 import toml
 import sys
 import os
-import lark_parser
+import main
 
 
 
@@ -35,7 +35,7 @@ for puzzle in data['puzzles']:
         expected_result = example['result']
         
         try:
-            result = lark_parser.evaluate_code_ignoring_default_args(code, args)
+            result = main.evaluate_code_ignoring_default_args(code, args)
             if result == expected_result:
                 print(f"✅ Test passed for puzzle: {name}, args: {args}")
             else:
