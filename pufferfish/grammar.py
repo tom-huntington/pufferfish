@@ -22,7 +22,7 @@ hofd: HOF1 "{{" func  "}}" | HOF2 "{{" func~2 "}}"
 _hof: hofm | hofd
 HOF1: {hofs1}
 HOF2 . 1: {hofs2}
-builtin: BUILTIN_DYAD | BUILTIN_MONAD
+builtin: BUILTIN_DYAD | BUILTIN_MONAD | BUILTIN_MONAD_L
 BUILTIN_DYAD: {' | '.join(f'"{a}"' for a in dyadic.keys())}
 BUILTIN_MONAD: {' | '.join(f'"{a}"' for a in monadic.keys() if a not in ["i"])}
 BUILTIN_MONAD_L . -1: "i"
