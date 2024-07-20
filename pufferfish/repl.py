@@ -1,6 +1,6 @@
 import itertools
 from prompt_toolkit import PromptSession
-import main as main_module
+from pufferfish import main as main_module
 from typing import Callable
 from prompt_toolkit.styles import Style
 from prompt_toolkit.lexers import Lexer

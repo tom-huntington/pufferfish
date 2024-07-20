@@ -1,16 +1,19 @@
+import jelly.utils
 from lark import Lark, Transformer, Tree, Token
 from lark.indenter import Indenter
-from core import *
-import grammar
+from pufferfish import core
+from pufferfish import grammar
 # from jello.tokens import
 import argparse
-import stringify as puffer_stringify
+from pufferfish import stringify as puffer_stringify
 import jello.jello
+from pufferfish import repl
 from ast import literal_eval
+import jelly
 
 def func(arity, children):
-    link = apply_combinator([c.link for c in children], arity)
-    return InteriorWrapper(link, None, children)
+    link = core.apply_combinator([c.link for c in children], arity)
+    return core.InteriorWrapper(link, None, children)
 
 def make_link_for_quick_hyper(key, hof_arguments):
 
@@ -32,16 +35,16 @@ class LinkTransformer(Transformer):
 
 
     def monad(self, children):
-        return apply_combinator(children, 1)
+        return core.apply_combinator(children, 1)
 
     def dyad(self, children):
-        return apply_combinator(children, 2)
+        return core.apply_combinator(children, 2)
 
     def literal(self, children):
         child, = children
         literal_as_str, = child.children
         value = literal_eval(literal_as_str)
-        return attrdict(call=(lambda: value), arity=0)
+        return jelly.utils.attrdict(call=(lambda: value), arity=0)
     
     def hofm(self, children):
         name, *hof_arguments = children
@@ -112,10 +115,10 @@ def evaluate_code(code, args):
     match link.arity:
         case 1:
             arg, = args
-            return monadic_link(link, arg)
+            return jelly.interpreter.monadic_link(link, arg)
         case 2:
             assert len(args) == 2
-            return dyadic_link(link, args)
+            return jelly.interpreter.dyadic_link(link, args)
 
 def main():
     parser = argparse.ArgumentParser(description='Pufferfish interpreter')
@@ -130,8 +133,7 @@ def main():
             code = f.read()
     
     if not (args.code or args.file):
-        print("No code provided")
-        exit(1)
+        repl.main()
 
     print(evaluate_maybe_string_args(args.code or code, args.args))
     

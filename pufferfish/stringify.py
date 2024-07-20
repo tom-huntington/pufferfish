@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field
 
 from lark import Transformer
-from core import HofWrapper, InteriorWrapper, LeafWrapper, puffer_eval
-import parse_pythonic_syntax
+from pufferfish.core import HofWrapper, InteriorWrapper, LeafWrapper, puffer_eval
+# import parse_pythonic_syntax
 from numpy.typing import NDArray
 import numpy as np
 from more_itertools import interleave_longest, windowed
 from itertools import repeat, accumulate
 from operator import add
-import main
+from pufferfish import main
 import jello.jello
 from jelly.utils import attrdict
 import jelly

@@ -1,8 +1,8 @@
 import toml
 import sys
 import os
-import main
-
+from pufferfish import main
+import jelly
 
 
 # Load the TOML file
