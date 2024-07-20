@@ -38,6 +38,19 @@ We can omit `.` and `:` when we have exactly three arguments:
 \ tail sort . take 2 pair head \ flat sum
 ```
 
+To help you read the code, pufferfish will print the combinator tree:
+```
+tail sort take 2 pair head flat sum
+  ╰─┬──╯    │  │   │    │    ╰─┬─╯
+    B       │  │   │    │      B
+    ╰───┬───┴──╯   │    │      │
+       Φₖ          │    │      │
+        ╰────┬─────┴────╯      │
+             Φ                 │
+             ╰───┬─────────────╯
+                 B
+```
+
 ## Definition of `F₁` and `F₂`
 
 `F₁` and `F₂` are solely determined by the arity of their arguments.
