@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+name = "jellyfish"
+readme = "README.md"
+description = "An alternative syntax for Jello/Jellyfish"
+
+[project.scripts]
+pufferfish = "pufferfish.main:main"
+
+[tool.setuptools]
+packages = ["pufferfish"]
+

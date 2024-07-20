@@ -2,3 +2,5 @@
 jello_history.txt
 .vscode
 __pycache__/
+jellyfish.egg-info/
+build/
