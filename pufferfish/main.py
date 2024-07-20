@@ -71,13 +71,13 @@ sample_string = """\
 """
 
 def puffer_parse(code):
-    print("code\n", code)
-    for t in parser.lex(code):
-        print((t.line, t.column), repr(t))
+    # print("code\n", code)
+    # for t in parser.lex(code):
+    #     print((t.line, t.column), repr(t))
 
     syntax_tree = parser.parse(code)
-    print(syntax_tree, "\n----")
-    print(syntax_tree.pretty())
+    # print(syntax_tree, "\n----")
+    # print(syntax_tree.pretty())
     return syntax_tree
 
 def make_link(ast):
@@ -127,7 +127,7 @@ def main():
     parser.add_argument('-f', '--file', type=str, help='Code file path')
     parser.add_argument('-a', '--args', nargs='+')
     args = parser.parse_args()
-    print(args.args)
+    # print(args.args)
     if args.file and not args.code:
         with open(args.file) as f:
             code = f.read()

@@ -111,17 +111,17 @@ class NodeTransformer(Transformer):
     #     return InteriorWrapper(attrdict(arity=1), None, children)
     #     return apply_combinator([c for c in children if c is not None], 1)
     
-    def hof(self, children):
+    def hof(self, children, glyph):
         quick_name, *hof_arguments = children
         link = main.make_link_for_quick_hyper(quick_name, [arg.link for arg in hof_arguments])
-        res = HofWrapper(link, quick_name.value, hof_arguments)
+        res = HofWrapper(link, glyph, hof_arguments)
         return res
     
     def hofd(self, children):
-        return self.hof(children)
+        return self.hof(children, "h₂")
     
     def hofm(self, children):
-        return self.hof(children)
+        return self.hof(children, "h₁")
     
     def literal(self, children):
         child, = children

@@ -52,7 +52,7 @@ literal: number
 # %import common.ESCAPED_STRING
 
 
-print(grammar)
+# print(grammar)
 
 sample_string ="""\
 | idiv"""
