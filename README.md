@@ -80,6 +80,17 @@ They can be described by the following tables for `F₁` and `F₂` respectively
 ### Other higher order functions
 Jelly also has explicit higher order functions. Pufferfish requires you to specify the arity of the result by whether you use braces `{}` or parenthese `()` at the call site i.e. `hof_name(func1 func2)` for a monadic result.
 
+
+### Justification
+
+An alternative syntax is needed for two reasons:
+
+- **Arbitrary Nesting**: Jelly only allows one level of nesting using separators.
+- **Regularity**: When not nesting Pufferfish is a regular grammar but Jelly is a context free grammar. To read a Jelly chain you are required to run a pushdown automata. To read a Pufferfish chain you only have to run a finite automata inside your head.
+
+
+
+
 # Examples
 The solutions are [@codereport](https://github.com/codereport)'s https://github.com/codereport/jello/blob/main/challenges.md.
 | Problem | Solution |
