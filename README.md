@@ -86,7 +86,7 @@ Jelly also has explicit higher order functions. Pufferfish requires you to speci
 An alternative syntax is needed for two reasons:
 
 - **Arbitrary Nesting**: Jelly only allows one level of nesting using separators.
-- **Regularity**: When not nesting Pufferfish is a regular grammar but Jelly is a context free grammar. To read a Jelly chain you are required to run a pushdown automata. To read a Pufferfish chain you only have to run a finite automata inside your head.
+- **Regularity**: The combinator boundaries in Pufferfish form a regular grammar. In Jelly the combinator boundaries form a context free grammar. To determine the boundaries of a Jelly chain, you must run a pushdown automata (1 stack) inside your head. To determine the boundaries of a Pufferfish chain, you merely have to run a finite automata (0 stacks) inside your head. This considerably reduces the cognitive burden needed to understand the code, and is the reason why I wont bother to learn APL or J (Uiua like Pufferfish is much easier to read).
 
 
 
